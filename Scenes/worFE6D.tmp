@@ -1,0 +1,33 @@
+[gd_scene load_steps=6 format=3 uid="uid://ci0qpoanatlgm"]
+
+[ext_resource type="PackedScene" uid="uid://cpvg1e4ql5v72" path="res://Scenes/Maps/Graveyard.tscn" id="1_e5f8r"]
+[ext_resource type="PackedScene" uid="uid://gn22yg1stmfj" path="res://Scenes/Entity/Player/player.tscn" id="3_hi1ut"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h6ctl"]
+sky_top_color = Color(0.0908633, 0.145094, 0.252176, 1)
+sky_horizon_color = Color(0.00125204, 0, 0.0750898, 1)
+ground_bottom_color = Color(0.0973893, 0.0922685, 0.0784831, 1)
+ground_horizon_color = Color(0.0130405, 0.0454049, 0.0555168, 1)
+sun_curve = 1e-05
+
+[sub_resource type="Sky" id="Sky_e1bsg"]
+sky_material = SubResource("ProceduralSkyMaterial_h6ctl")
+
+[sub_resource type="Environment" id="Environment_gpm78"]
+background_mode = 2
+sky = SubResource("Sky_e1bsg")
+
+[node name="World" type="Node3D"]
+
+[node name="Graveyard" parent="." instance=ExtResource("1_e5f8r")]
+
+[node name="Player" parent="." instance=ExtResource("3_hi1ut")]
+
+[node name="Env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Env"]
+environment = SubResource("Environment_gpm78")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Env"]
+transform = Transform3D(-0.965926, -0.12941, 0.224144, 0, 0.866025, 0.5, -0.258819, 0.482963, -0.836516, 0, 3, 0)
+shadow_enabled = true
