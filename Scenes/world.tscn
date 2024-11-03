@@ -1,8 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://ci0qpoanatlgm"]
+[gd_scene load_steps=11 format=3 uid="uid://ci0qpoanatlgm"]
 
 [ext_resource type="Script" path="res://Scenes/world.gd" id="1_74ji3"]
+[ext_resource type="Texture2D" uid="uid://bo14lacwa8oj1" path="res://icon.svg" id="2_blv7g"]
 [ext_resource type="PackedScene" uid="uid://gn22yg1stmfj" path="res://Scenes/Entity/player.tscn" id="3_hi1ut"]
-[ext_resource type="PackedScene" uid="uid://bcp7lt3n15mo8" path="res://Scenes/Entity/ghost.tscn" id="4_rr1gj"]
+[ext_resource type="PackedScene" uid="uid://bcp7lt3n15mo8" path="res://Scenes/Entity/wisp.tscn" id="4_rr1gj"]
+[ext_resource type="PackedScene" uid="uid://dgtyiwirwk6tn" path="res://Scenes/ice_cream_truck.tscn" id="5_u2cla"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p8tku"]
+albedo_texture = ExtResource("2_blv7g")
+uv1_scale = Vector3(5, 5, 5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jshd6"]
+material = SubResource("StandardMaterial3D_p8tku")
+size = Vector2(20, 20)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h6ctl"]
 sky_top_color = Color(0.0908633, 0.145094, 0.252176, 1)
@@ -22,6 +32,10 @@ sky = SubResource("Sky_e1bsg")
 script = ExtResource("1_74ji3")
 
 [node name="Map" type="Node3D" parent="."]
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="Map"]
+use_collision = true
+mesh = SubResource("PlaneMesh_jshd6")
 
 [node name="Players" type="Node3D" parent="."]
 
@@ -76,3 +90,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
 
 [node name="Ghost2" parent="Ghosts" instance=ExtResource("4_rr1gj")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 4)
+
+[node name="IceCreamTruck" parent="." instance=ExtResource("5_u2cla")]

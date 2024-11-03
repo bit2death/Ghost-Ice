@@ -7,6 +7,7 @@ func _ready() -> void:
 	var players = get_tree().get_nodes_in_group("player")
 	for player in players:
 		player.caught_ghost.connect(self._on_ghost_caught)
+		player.exit_level.connect(self._on_level_exit)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -16,3 +17,6 @@ func _on_ghost_caught():
 	print("YAY")
 	ghosts_caught += 1
 	$UI/MarginContainer/GridContainer/CaughtLabel.text = str(ghosts_caught)
+
+func _on_level_exit():
+	pass

@@ -1,0 +1,35 @@
+[gd_scene load_steps=7 format=3 uid="uid://bcp7lt3n15mo8"]
+
+[ext_resource type="Script" path="res://Scenes/Entity/wisp.gd" id="1_fxryb"]
+[ext_resource type="PackedScene" uid="uid://cdf4los5nsp5v" path="res://Assets/Models/wisp.glb" id="3_ggis3"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8jebi"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_34gs2"]
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_2nmei"]
+material = SubResource("StandardMaterial3D_34gs2")
+size = Vector2(0.1, 0.1)
+
+[sub_resource type="Gradient" id="Gradient_f1c27"]
+offsets = PackedFloat32Array(0, 0.12, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="Wisp" type="Area3D" groups=["ghost"]]
+script = ExtResource("1_fxryb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_8jebi")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+mesh = SubResource("QuadMesh_2nmei")
+particle_flag_align_y = true
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 2.0
+color_ramp = SubResource("Gradient_f1c27")
+
+[node name="wisp" parent="." instance=ExtResource("3_ggis3")]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)

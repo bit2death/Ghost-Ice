@@ -2,10 +2,13 @@ extends CharacterBody3D
 
 @onready var head = $Head
 @onready var vacuumArea = $Head/VacuumArea
+@onready var anim = $AnimationPlayer
+@onready var vacuumNozzle = $Head/suckedArea/CollisionShape3D2
 
 # preset values
 
 signal caught_ghost
+signal exit_level
 
 const WALK_SPEED = 4
 const SPRINT_SPEED = 7
@@ -20,7 +23,10 @@ var direction: Vector3 = Vector3.ZERO
 var mouse_sens = 10
 
 var mouse_pos = Vector2.ZERO
+var sucking = false
 
+func _ready():
+	$Head/Vacuum/CPUParticles3D.emitting = false
 
 func _physics_process(delta: float) -> void:
 	if position.y == -30:
@@ -37,6 +43,13 @@ func _physics_process(delta: float) -> void:
 	
 	if Input.is_action_pressed("lmb"):
 		vacuum()
+		if !sucking:
+			sucking = true
+			anim.play("suck")
+	else:
+		if sucking:
+			sucking = false
+			anim.play("stop_sucking")
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
@@ -63,8 +76,10 @@ func vacuum():
 	var ghosts = vacuumArea.get_overlapping_areas()
 	for item in ghosts:
 		if item.is_in_group("ghost"):
-			item.get_caught()
-			emit_signal("caught_ghost")
+			item.suck()
+		if item.is_in_group("truck"):
+			emit_signal("exit_level")
+			# end game cutscene
 
 func look_handler(delta):
 	rotation.y += deg_to_rad(-mouse_pos.x) * mouse_sens * delta
@@ -75,3 +90,9 @@ func look_handler(delta):
 func _input(event):
 	if event is InputEventMouseMotion:
 		mouse_pos = event.relative
+
+
+func _on_sucked_area_area_shape_entered(area_rid: RID, area: Area3D, area_shape_index: int, local_shape_index: int) -> void:
+	if area.is_in_group("ghost"):
+		emit_signal("caught_ghost")
+		area.get_caught()

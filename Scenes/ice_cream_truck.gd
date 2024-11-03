@@ -1,5 +1,6 @@
-extends Area3D
+extends Node3D
 
+var is_driving_off = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -8,9 +9,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
-	# hover and float around a little
+	if is_driving_off:
+		position.z += 5 * delta
 
-func get_caught():
-	# suck animation
-	queue_free()
+func drive_off():
+	is_driving_off = true
