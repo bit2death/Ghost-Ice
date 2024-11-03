@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3 uid="uid://bcp7lt3n15mo8"]
+
+[ext_resource type="Script" path="res://Scenes/Entity/ghost.gd" id="1_fxryb"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_x875w"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_e2iyn"]
+
+[node name="Ghost" type="Area3D" groups=["ghost"]]
+script = ExtResource("1_fxryb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_x875w")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_e2iyn")

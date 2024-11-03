@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://ci0qpoanatlgm"]
+[gd_scene load_steps=7 format=3 uid="uid://ci0qpoanatlgm"]
 
-[ext_resource type="PackedScene" uid="uid://cpvg1e4ql5v72" path="res://Scenes/Maps/Graveyard.tscn" id="1_e5f8r"]
-[ext_resource type="PackedScene" uid="uid://gn22yg1stmfj" path="res://Scenes/Entity/Player/player.tscn" id="3_hi1ut"]
+[ext_resource type="Script" path="res://Scenes/world.gd" id="1_74ji3"]
+[ext_resource type="PackedScene" uid="uid://gn22yg1stmfj" path="res://Scenes/Entity/player.tscn" id="3_hi1ut"]
+[ext_resource type="PackedScene" uid="uid://bcp7lt3n15mo8" path="res://Scenes/Entity/ghost.tscn" id="4_rr1gj"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h6ctl"]
 sky_top_color = Color(0.0908633, 0.145094, 0.252176, 1)
@@ -17,11 +18,14 @@ sky_material = SubResource("ProceduralSkyMaterial_h6ctl")
 background_mode = 2
 sky = SubResource("Sky_e1bsg")
 
-[node name="World" type="Node3D"]
+[node name="WorldTemplate" type="Node3D"]
+script = ExtResource("1_74ji3")
 
-[node name="Graveyard" parent="." instance=ExtResource("1_e5f8r")]
+[node name="Map" type="Node3D" parent="."]
 
-[node name="Player" parent="." instance=ExtResource("3_hi1ut")]
+[node name="Players" type="Node3D" parent="."]
+
+[node name="Player" parent="Players" instance=ExtResource("3_hi1ut")]
 
 [node name="Env" type="Node3D" parent="."]
 
@@ -31,3 +35,44 @@ environment = SubResource("Environment_gpm78")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Env"]
 transform = Transform3D(-0.965926, -0.12941, 0.224144, 0, 0.866025, 0.5, -0.258819, 0.482963, -0.836516, 0, 3, 0)
 shadow_enabled = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="GridContainer" type="GridContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+columns = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "Ghosts caught:"
+
+[node name="CaughtLabel" type="Label" parent="UI/MarginContainer/GridContainer"]
+layout_mode = 2
+text = "0"
+
+[node name="CenterContainer" type="CenterContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="UI/CenterContainer"]
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 2
+
+[node name="Ghosts" type="Node3D" parent="."]
+
+[node name="Ghost" parent="Ghosts" instance=ExtResource("4_rr1gj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 4)
+
+[node name="Ghost2" parent="Ghosts" instance=ExtResource("4_rr1gj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, 4)

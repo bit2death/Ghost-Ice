@@ -1,8 +1,11 @@
 extends CharacterBody3D
 
 @onready var head = $Head
+@onready var vacuumArea = $Head/VacuumArea
 
 # preset values
+
+signal caught_ghost
 
 const WALK_SPEED = 4
 const SPRINT_SPEED = 7
@@ -18,10 +21,10 @@ var mouse_sens = 10
 
 var mouse_pos = Vector2.ZERO
 
-func _ready():
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _physics_process(delta: float) -> void:
+	if position.y == -30:
+		position = self.get_parent().position
 	look_handler(delta)
 	# Add the gravity.
 	if not is_on_floor():
@@ -31,6 +34,9 @@ func _physics_process(delta: float) -> void:
 		max_speed = SPRINT_SPEED
 	else:
 		max_speed = WALK_SPEED
+	
+	if Input.is_action_pressed("lmb"):
+		vacuum()
 	
 	# Handle jump.
 	if Input.is_action_just_pressed("jump") and is_on_floor():
@@ -51,6 +57,14 @@ func _physics_process(delta: float) -> void:
 	velocity.z = lerp(velocity.z, direction.z * speed, delta * 10)
 	
 	move_and_slide()
+
+func vacuum():
+	# play sfx
+	var ghosts = vacuumArea.get_overlapping_areas()
+	for item in ghosts:
+		if item.is_in_group("ghost"):
+			item.get_caught()
+			emit_signal("caught_ghost")
 
 func look_handler(delta):
 	rotation.y += deg_to_rad(-mouse_pos.x) * mouse_sens * delta
